@@ -1,0 +1,35 @@
+version: "3"
+services:
+  node:
+    build: .
+    container_name: plant_node
+    environment:
+      - NODE_ENV=production
+      - TZ=Europe/Zurich
+    restart: always
+    ports:
+      - 80:3000 #app
+      - 8080:8080 #socketServer
+    command: npm run start
+    links: 
+      - mongo
+    mongo:
+      container_name: plant_mongo
+      restart: always
+      command: [--auth]
+      environment:
+        TZ: Europe/Zurich
+        MONGO_INITDB_ROOT_USERNAME: ${DB_ADMIN} #set in .env (has to be in same directory as composefile)
+        MONGO_INITDB_ROOT_PASSWORD: ${DB_ADMIN_PW} #these variables have no impact on dbs already created. for example in a mounted volume at build time
+      image: mongo:3.6-xenial
+      ports:
+        - 27017:27017
+      volumes:
+        - DATA:/data/db
+        # - ./data/db:home/app/data/db
+  volumes:
+    DATA:
+    # - ~/data/db:home/app/data/db
+    # to start from here docker-compose -f docker-compose-prod.yaml --build up
+    
+    

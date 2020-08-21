@@ -1,0 +1,22 @@
+PORT=yourPortNumber
+SESSION_SECRET=yourSessionSecret
+
+#instead of localhost use container name (mongo) in this case. the container has to be linked in compose file
+MONGO_URL=mongodb://mongo:27017/[yourDBName]
+DB_USER=yourUser
+DB_PASSWORD=yourPassword>
+DBNAME=yourDBName
+
+#admin
+DB_ADMIN=yourRootUserName
+DB_ADMIN_PW=yourRootPassword
+
+
+#db.createUser(
+#{
+#    user: "yourUserName",
+#    pwd: "<yourPassword>",
+#    roles: [
+#      { role: "readWrite", db: "yourDBName" }
+#    ]
+#})

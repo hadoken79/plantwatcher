@@ -1,0 +1,39 @@
+@charset "utf-8";
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts'; 
+
+// Set accent colors
+$purple: #8A4D76; 
+$purple-deep: #44394a;
+$pink: #FA7C91;
+$brown: #757763;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+$accent: hsl(171, 100%, 41%);
+
+// Update Bulma's global variables
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $purple; 
+$link: $beige-light;
+$info: $accent;
+
+//card
+$card-background-color: #393c40;
+$card-color: black;
+$card-header-color: black;
+
+
+// Update some of Bulma's component variables
+
+//main stuff
+$body-background-color: black;
+$body-color: $beige-lighter;
+
+//navbar
+$navbar-background-color: $purple-deep;
+$navbar-dropdown-background-color: $purple;
+$navbar-item-color: white;
+$navbar-item-hover-background-color: $purple;
+
+
+

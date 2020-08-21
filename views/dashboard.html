@@ -1,0 +1,44 @@
+{{> head}}
+
+<body class="has-navbar-fixed-bottom">
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 id='mainTitle' class="title">
+          {{title}}
+        </h1>
+        <h2 class="subtitle has-text-danger">
+          <!--info if no data from db-->
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      
+      <article class="message is-danger">
+        <div class="message-header">
+          <p>Löschen</p>
+        </div>
+        <div class="message-body">
+          Pflanze wirklich löschen?
+          <button id="deleteModal-confirm" class="button is-danger is-pulled-right">löschen</button>
+      </article>
+      
+    </div>
+    <button id="deleteModal-close" class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <main id="dashboard" class="container">
+   
+   
+    <div id="plantList" class="columns is-multiline">
+    </div>
+     
+  </main>
+</body>
+
+{{> footer}}

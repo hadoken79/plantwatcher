@@ -1,0 +1,45 @@
+{
+  "name": "plantwatch",
+  "version": "0.0.1",
+  "description": "check humidity of your plants with a microcontroller",
+  "main": "server.js",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "body-parser": "^1.19.0",
+    "dopyo.js": "^0.1.7",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.6",
+    "express-rate-limit": "^5.1.3",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.0",
+    "file-loader": "^6.0.0",
+    "gauge-chart": "^0.5.3",
+    "helmet": "^3.23.3",
+    "mongoose": "^5.9.26",
+    "path": "^0.12.7",
+    "sortablejs": "^1.10.2",
+    "ws": "^7.3.1"
+  },
+  "devDependencies": {
+    "bulma": "^0.9.0",
+    "css-loader": "^3.6.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "lodash": "^4.17.19",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "nodemon": "^2.0.4",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "build": "webpack",
+    "dev": "nodemon server.js",
+    "start": "webpack && node server.js",
+    "watch": "webpack --watch"
+  },
+  "author": "linus pauls",
+  "license": "ISC"
+}
