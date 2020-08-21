@@ -3,9 +3,10 @@ import { drawLineChart, drawGauge } from './charts.js';
 import { getDataFromBackend, updatePlant } from './com.js';
 import { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete } from './DashboardSettings';
 import { drawToast } from './toasts';
-import { permittedCrossDomainPolicies } from 'helmet';
-import { reject } from 'lodash';
-import { resolve } from 'path';
+//import { permittedCrossDomainPolicies } from 'helmet';
+//import { reject } from 'lodash';
+//import { resolve } from 'path';
+
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 const drawDashboard = async () => {
 
-    //render Weather Info // async
+    //render Weather Info // async if needed
     let plants = await getDataFromBackend('/api/getPlants');
 
     if (plants.length == 0) {
