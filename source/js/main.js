@@ -87,13 +87,13 @@ const updateSinglePlant = async (plant) => {
 
     //get elemets of specific card
     let card = document.getElementById(plant.plantId);
-    let title = card.firstChild.firstChild;
+    let title = card.firstChild.nextSibling.firstChild;
     let powerstat = title.nextSibling;
-    let gaugeArea = card.firstChild.nextSibling.firstChild;
+    let gaugeArea = card.firstChild.nextSibling.nextSibling.firstChild;
     let lineArea = gaugeArea.nextSibling;
     let lastUpdate = lineArea.nextSibling;
-    let titleInput = card.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild;
-    let idInput = card.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.nextSibling;
+    let titleInput = card.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild;
+    let idInput = titleInput.nextSibling;
     let elements = [title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card];
     //updata values
     fillCardWithData(plant, readings, elements);
@@ -115,7 +115,7 @@ const fillCardWithData = (plant, readings, elements) => {
     titleInput.value = `${plant.name}`
     idInput.value = `ID für Sensor: ${plant.plantId}`;
 
-    //cleanup older i-cons and graphs
+    //cleanup older icons and graphs
     while (powerstat.firstChild) {
         powerstat.removeChild(powerstat.firstChild);
     }
@@ -206,7 +206,7 @@ const createPlantCard = (plant) => {
         deleteButton.className = 'delete is-hidden';
 
         deleteButton.addEventListener('click', (e) => {
-            let plantId = e.target.parentElement.parentElement.id;
+            let plantId = e.target.parentElement.id;
             let confirmButton = document.getElementById('deleteModal-confirm');
             confirmButton.replaceWith(confirmButton.cloneNode(true));//remove old eventlisteners
             handleDelete(plantId);
@@ -256,20 +256,21 @@ const createPlantCard = (plant) => {
                 //remove dummytags
                 e.target.className = 'button is-small is-primary is-pulled-right is-rounded settingsSaver';//change button style
                 e.target.innerText = 'save';//change savebutton text
-                e.target.parentElement.parentElement.previousSibling.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden');//make deletebutton visible
+
+                e.target.parentElement.parentElement.parentElement.firstChild.classList.toggle('is-hidden');//make deletebutton visible
                 e.target.parentElement.parentElement.parentElement.classList.remove('dummycard');
                 e.target.parentElement.parentElement.parentElement.id = newId.plantId;//store the news id from db in card id field
 
                 //store new Plant
                 let name = e.target.previousSibling.previousSibling.value;
-
                 let cards = document.querySelectorAll('.card');
                 let position = cards.length - 1;//subtract dummy
                 plant = { plantId: newId.plantId, name: name, pos: position, active: true };
                 await updatePlant('/api/postPlant', plant);
+                await toggleDummyCard();
 
             } else {
-                await toggleDummyCard();
+                //await toggleDummyCard();
                 let p = [];
                 document.querySelectorAll('.titleInput:not(.dummytitle)').forEach(title => {
                     p.push(new Promise((resolve, reject) => {
@@ -288,31 +289,37 @@ const createPlantCard = (plant) => {
                 }
             }
             updateAllPlantsInDB();//position Element for every card has to get an update, in case order has changed
-            toggleSortable();
-            toggleCardWiggle();
-            toggleSettingsView();
-
+            //exit settings mode
+            //toggleSortable();
+            //toggleCardWiggle();
+            //toggleSettingsView();
+            //toggleDummyCard();
         })
 
+        //assemble
         dataForm.appendChild(titleInput);
         dataForm.appendChild(idInput);
         dataForm.appendChild(saveButton);
-        //assemble
+
         header.appendChild(title);
         header.appendChild(powerstat);
-        header.appendChild(deleteButton);
+
+
+
+        card.appendChild(deleteButton);
         card.appendChild(header);
         cardBody.appendChild(gaugeArea);
         cardBody.appendChild(lineArea);
         cardBody.appendChild(lastUpdate);
         cardBody.appendChild(dataForm);
+
         //cardBody.appendChild(titleInput);
         //cardBody.appendChild(idInput);
         card.appendChild(cardBody);
         column.appendChild(card);
         wrapper.appendChild(column);
 
-        resolve([title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card, saveButton, deleteButton]);
+        resolve([title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card, saveButton, deleteButton, dataForm, header]);
     })
 
 }

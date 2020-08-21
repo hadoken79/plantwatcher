@@ -42,7 +42,7 @@ const toggleSortable = () => {
 }
 
 const toggleCardWiggle = () => {
-    let elems = document.querySelectorAll('.card');
+    let elems = document.querySelectorAll('.card:not(.dummycard)');
     elems.forEach(element => {
         element.classList.toggle('wiggle');
     });
@@ -51,25 +51,21 @@ const toggleCardWiggle = () => {
 
 const toggleSettingsView = () => {
 
-    let elems = document.querySelectorAll('.card');
+    let elems = document.querySelectorAll('.card:not(.dummycard)');
     elems.forEach(element => {
         //element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.removeEventListener('click', null);
         //hide CardData
-        //element.firstChild.classList.toggle('is-hidden');//header
-        element.firstChild.firstChild.classList.toggle('is-hidden');//title
-        element.firstChild.firstChild.nextSibling.classList.toggle('is-hidden');//BatterieIcon
-        element.firstChild.nextSibling.firstChild.classList.toggle('is-hidden');//GaugeArea
-        element.firstChild.nextSibling.firstChild.nextSibling.classList.toggle('is-hidden');//LineArea
-        element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden');//UpdateArea
+        element.firstChild.classList.toggle('is-hidden');//deleteButton
+        element.firstChild.nextSibling.classList.toggle('is-hidden');//header
+
+        element.firstChild.nextSibling.nextSibling.firstChild.classList.toggle('is-hidden');//GaugeArea
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.classList.toggle('is-hidden');//LineArea
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden');//UpdateArea
 
         //show inputs
-        element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//form
-        //element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//title
-        //element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//id
-
-        //show delete button
-        element.firstChild.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden');
-
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//form
+        //element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//title
+        //element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//id
     })
 }
 
@@ -82,7 +78,7 @@ const updateAllPlantsInDB = async () => {
     for (let i = 0; i < elems.length; i++) {
 
         //get field data
-        let title = elems[i].firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.value;
+        let title = elems[i].firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.value;
         let plantId = elems[i].id;
 
         //counter in loop is also current position parameter
@@ -106,17 +102,22 @@ const updateAllPlantsInDB = async () => {
 }
 
 const generatePlacehoderCard = async () => {
-    //[title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card, saveButton, deleteButton]
+    //[title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card, saveButton, deleteButton, dataForm, header]
     let newId = await getDataFromBackend('/api/getNewId');
     let elems = await createPlantCard({ plantId: 9999, name: "new Plant", pos: 9999 });
     return new Promise((resolve, reject) => {
-        elems[7].className = 'card dummycard is-warning';
+        elems[2].classList.toggle('is-hidden');
+        elems[3].classList.toggle('is-hidden');
+        elems[4].classList.toggle('is-hidden');
+        elems[7].className = 'card dummycard wiggle';
         elems[5].classList.add('dummytitle');
         elems[5].setAttribute('placeholder', 'Neue Pflanze');
         elems[8].className = 'button is-small is-success is-pulled-right is-rounded newPlant'
         elems[8].innerText = 'neu';
         elems[6].value = `ID für Sensor: ${newId.plantId}`;
-        elems[9].classList.toggle('is-hidden');
+        //elems[9].classList.toggle('is-hidden');
+        elems[10].classList.toggle('is-hidden');
+        elems[11].classList.toggle('is-hidden');
         resolve();
     })
 
@@ -140,6 +141,7 @@ const handleDelete = async (plantId) => {
 
     confirmButton.addEventListener('click', async () => {
         await updatePlant('/api/deletePlant', data);//set choosen plant to inactive in db
+        console.log('ID: ' + plantId);
         document.getElementById(plantId).parentElement.parentElement.removeChild(document.getElementById(plantId).parentElement);
         toggleModal();
         let plants = await getDataFromBackend('/api/getPlants');
