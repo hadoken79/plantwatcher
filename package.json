@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "webpack --env.mode=production",
-    "dev": "nodemon server.js && npm run watch",
+    "dev": "nodemon server.js",
     "start": "npm run build && node server.js",
     "watch": "webpack --env.mode=development --watch"
   },

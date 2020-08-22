@@ -10,7 +10,7 @@ module.exports = env => {
         mode: env.mode,
         entry: './source/js/main.js',
         output: {
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'dist/'),
             filename: '[name].[contenthash].js'
         },
         module: {
@@ -30,7 +30,7 @@ module.exports = env => {
                             loader: 'file-loader',
                             options: {
                                 name: '[name].[ext]',
-                                outputPath: '/assets',
+                                outputPath: 'assets/',
                                 publicPath: '/', //is handled by express-static
                             },
                         },
