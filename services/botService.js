@@ -77,7 +77,7 @@ bot.launch();
 
 const sendMsg = (msg) => {
 
-    fetch('https://api.telegram.org/bot1391445755:AAEIc8kewcPa_PYrAShqDJajD7q0RBFBLvc/getUpdates').then(response => {
+    fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`).then(response => {
         if (response.ok) {
             return response.json();
         }
