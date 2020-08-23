@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Plant = require('../models/Plant');
 const Reading = require('../models/Reading');
 const sendStatus = require('../server');
+const bot = require('./botService');
 
 
 const initDB = async () => {
@@ -26,6 +27,7 @@ const connectDB = async () => {
 };
 
 const getPlants = () => {
+    bot.sendMsg('ola');
     return new Promise((resolve, reject) => {
         Plant.find({ active: true }, (err, plants) => {
             if (err) {
@@ -58,14 +60,20 @@ const getPlantReadings = (pId) => {
 
 const storeReading = (data) => {
     return new Promise((resolve, reject) => {
-        console.log('received ' + data);
+        console.log(data);
+
+
+        if (data.hum < 90) {
+            console.log('zu tief');
+            //bot.sendMsg('ola');
+        }
         let reading = new Reading(data);
         reading.save((err) => {
             if (err) {
                 try {
                     sendStatus.sendMsg(JSON.stringify({ "type": "error", "msg": err }));
                 } catch{
-                    console.log('no message: no client connected');
+                    console.log('no message: no client connected or db error');
                 }
 
                 reject(err);
@@ -83,6 +91,7 @@ const storeReading = (data) => {
                     }
                 }
             });
+            console.log('saved data');
             resolve('saved');
         });
     });

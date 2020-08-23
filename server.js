@@ -8,6 +8,7 @@ const express = require('express'),
     helmet = require('helmet'),
     rateLimit = require('express-rate-limit'),
     db = require('./services/dbService');
+//bot = require('./services/botService');
 
 require('dotenv').config();
 
@@ -73,6 +74,8 @@ server.listen(port, () => {
         `Server now listening at Port ${port} running in ${process.env.NODE_ENV} mode`
     );
 });
+
+
 
 
 //websocket-server to connect with client. communication over port 8080. needs to be maped in container
