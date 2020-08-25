@@ -1,9 +1,10 @@
 const telegraf = require("telegraf");
-require("dotenv").config();
 const dbService = require('./dbService');
 const fetch = require('node-fetch');
+require("dotenv").config();
 
-const regex = /\w*pflanze\w*/i;
+
+//const regex = /\w*pflanze\w*/i;
 //let bot;
 // //middleware
 // bot.use(async (ctx, next) => {
@@ -13,16 +14,33 @@ const regex = /\w*pflanze\w*/i;
 //   console.log("Response time: %sms", ms);
 // });
 
+let bot;
+let chatId;
+
+
+if (!bot) {
+    console.log("no bot till now");
+    bot = new telegraf(process.env.BOT_TOKEN);
+} else {
+    console.log("there is a bot");
+}
+
+
 
 let t = 0;
 
-const bot = new telegraf(process.env.BOT_TOKEN);
-bot.start((ctx) => ctx.reply(`Hallo ${ctx.message.from.first_name} kann ich dir helfen?`));
+bot.start((ctx) => {
+    chatId = ctx.chat.id;
+    ctx.reply(`Hallo ${ctx.message.from.first_name} kann ich dir helfen?`);
+});
+
 bot.help((ctx) => ctx.reply('Frag mich nach den Pflanzen, ich weiss Bescheid.'));
 bot.on('sticker', (ctx) => ctx.reply('👍'));
+bot.catch((err, ctx) => console.log(`Ooops, encountered an error for ${ctx.updateType}`, err));
+
 bot.on('message', (ctx) => {
 
-    //console.log(ctx.message.text.match(/pflanzen/));
+
     if (ctx.message.text) {
         if (ctx.message.text.match(/[planzen][giessen]/i)) {
             console.log('match');
@@ -31,9 +49,15 @@ bot.on('message', (ctx) => {
             t = 0;
             dbService.getPlants()
                 .then(plants => {
+                    if (plants.length < 1) {
+                        return ctx.reply(`ich finde keine Pfalnzen in der Datenbank, \nhast du schon welche erfasst?`);
+                    }
                     plants.forEach(plant => {
                         dbService.getPlantReadings(plant.plantId)
                             .then(readings => {
+                                if (readings.length < 1) {
+                                    return ctx.reply(`${plant.name}: noch keine Daten`);
+                                }
                                 return ctx.reply(`${plant.name}: ${readings[0].hum}\n`)
                             })
                     });
@@ -77,17 +101,18 @@ bot.launch();
 
 const sendMsg = (msg) => {
 
-    fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`).then(response => {
+    /* fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`).then(response => {
         if (response.ok) {
             return response.json();
         }
     }).then(body => {
         console.log(body);
-    })
+    }) */
 
-    //bot.telegram.sendMessage(chatId, msg);
+    bot.telegram.sendMessage(chatId, msg);
 
 };
+
 
 module.exports = {
     sendMsg

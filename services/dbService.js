@@ -3,12 +3,8 @@ const mongoose = require('mongoose');
 const Plant = require('../models/Plant');
 const Reading = require('../models/Reading');
 const sendStatus = require('../server');
-const bot = require('./botService');
 
 
-const initDB = async () => {
-
-}
 
 const connectDB = async () => {
     try {
@@ -27,7 +23,7 @@ const connectDB = async () => {
 };
 
 const getPlants = () => {
-    bot.sendMsg('ola');
+
     return new Promise((resolve, reject) => {
         Plant.find({ active: true }, (err, plants) => {
             if (err) {
@@ -40,6 +36,20 @@ const getPlants = () => {
         }).sort({ pos: 1 });
     });
 };
+
+const getPlantName = (_plantId) => {
+    return new Promise((resolve, reject) => {
+        Plant.find({ plantId: _plantId }, (err, plant) => {
+            if (err) {
+                console.log('error at plants from db' + err);
+                reject(err);
+            } else {
+                //console.log('plants from db ' + plant);
+                resolve(plant.name);
+            }
+        }).sort({ pos: 1 });
+    });
+}
 
 const getPlantReadings = (pId) => {
     //console.log('getMessures called ' + pId);
@@ -62,11 +72,6 @@ const storeReading = (data) => {
     return new Promise((resolve, reject) => {
         console.log(data);
 
-
-        if (data.hum < 90) {
-            console.log('zu tief');
-            //bot.sendMsg('ola');
-        }
         let reading = new Reading(data);
         reading.save((err) => {
             if (err) {
@@ -198,5 +203,6 @@ module.exports = {
     updatePlants,
     getNewId,
     storePlant,
-    deletePlant
+    deletePlant,
+    getPlantName
 };
