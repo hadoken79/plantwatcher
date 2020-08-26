@@ -7,8 +7,7 @@ const express = require('express'),
     webSocketServer = require('ws').Server,
     helmet = require('helmet'),
     rateLimit = require('express-rate-limit'),
-    db = require('./services/dbService'),
-    bot = require('./services/botService');
+    db = require('./services/dbService');
 
 require('dotenv').config();
 
