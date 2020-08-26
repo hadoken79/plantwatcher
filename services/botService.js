@@ -4,9 +4,9 @@ const fetch = require('node-fetch');
 require("dotenv").config();
 
 
-//const regex = /\w*pflanze\w*/i;
-//let bot;
-// //middleware
+
+
+////middleware
 // bot.use(async (ctx, next) => {
 //   const start = new Date();
 //   await next();
@@ -16,15 +16,12 @@ require("dotenv").config();
 
 let bot;
 let chatId;
+const regex = /\w*pflanzen\w*/i;
 
 
 if (!bot) {
-    console.log("no bot till now");
-    bot = new telegraf(process.env.BOT_TOKEN);
-} else {
-    console.log("there is a bot");
+    bot = new telegraf(process.env.BOT_TOKEN); //ensure there aren't two instances of bot
 }
-
 
 
 let t = 0;
@@ -36,13 +33,13 @@ bot.start((ctx) => {
 
 bot.help((ctx) => ctx.reply('Frag mich nach den Pflanzen, ich weiss Bescheid.'));
 bot.on('sticker', (ctx) => ctx.reply('👍'));
+bot.on('gif', (ctx) => ctx.reply('Hau bloos mit dem Zeug ab'));
 bot.catch((err, ctx) => console.log(`Ooops, encountered an error for ${ctx.updateType}`, err));
 
 bot.on('message', (ctx) => {
 
-
     if (ctx.message.text) {
-        if (ctx.message.text.match(/[planzen][giessen]/i)) {
+        if (ctx.message.text.match(regex)) {
             console.log('match');
             console.log(ctx.message.text);
             //match
@@ -69,11 +66,12 @@ bot.on('message', (ctx) => {
 
 
         } else {
-            console.log(ctx.message.text);
             t++
-            if (t == 1) return ctx.reply(`ich weiss nicht, wie ich es dir noch erklären kann...\n FRAG NACH DEINEN PFLANZEN!`);
-            if (t == 2) return ctx.reply(`bist du dumm?`);
-            if (t > 2) return ctx.reply(`geh weg!`);
+            console.log(ctx.message.text);
+
+            if (t == 2) return ctx.reply(`ich weiss nicht, wie ich es dir noch erklären kann...\n FRAG NACH DEINEN PFLANZEN!`);
+            if (t == 3) return ctx.reply(`bist du dumm?`);
+            if (t > 3) return ctx.reply(`geh weg!`);
 
             return ctx.reply(`du nuschelst so... \nWenn Du was zu deinen Pflanzen wissen willst, dann frag doch einfach.\n aber sprich deutlich.`);
         }

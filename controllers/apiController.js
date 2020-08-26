@@ -15,6 +15,7 @@ const getPlants = (req, res) => {
 };
 
 const getPlantReadings = (req, res) => {
+    //console.log(req.query);
     let plantId = req.query.pId;
 
     dbService
@@ -28,14 +29,13 @@ const getPlantReadings = (req, res) => {
 };
 
 const storeReadings = (req, res) => {
-    //console.log(req.body);
-    //console.log(req.body.hum);
 
-    if (req.body.hum > 101) {//Testwert => immer wahr
+
+    if (req.body.hum > 101) {//Testvalue always true
         dbService.getPlantName(req.body.plantId).then(name => {
             botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh nachsehen.`);
         }).catch(err => {
-            botService.sendMsg(`Habe kritische Werte erhalten, kann aber nicht festmachen welche Pflanze, da klemmt was in der Datenbank.`);
+            botService.sendMsg(`Habe kritische Werte erhalten, kann aber nicht festmachen welche Pflanze, da klemmt was in der Datenbank.\n hier die Meldung:${err}`);
         })
 
     }

@@ -31,7 +31,6 @@ const getPlants = () => {
                 console.log('error at plants from db' + err);
                 reject(err);
             } else {
-                console.log('plants from db ' + plants);
                 resolve(plants);
             }
         }).sort({ pos: 1 });
@@ -45,7 +44,6 @@ const getPlantName = (_plantId) => {
                 console.log('error at plants from db' + err);
                 reject(err);
             } else {
-                //console.log('plants from db ' + plant);
                 resolve(plant.name);
             }
         }).sort({ pos: 1 });
@@ -53,14 +51,14 @@ const getPlantName = (_plantId) => {
 }
 
 const getPlantReadings = (pId) => {
-    //console.log('getMessures called ' + pId);
+
     return new Promise((resolve, reject) => {
+        if (!pId) reject('invalid id');
         Reading.find({ plantId: pId }, (err, readings) => {
             if (err) {
                 console.log('error from db' + err);
                 reject(err);
             } else {
-                //console.log('response from db ' + readings);
                 resolve(readings);
             }
         })
@@ -71,7 +69,6 @@ const getPlantReadings = (pId) => {
 
 const storeReading = (data) => {
     return new Promise((resolve, reject) => {
-        console.log(data);
 
         let reading = new Reading(data);
         reading.save((err) => {
@@ -97,7 +94,6 @@ const storeReading = (data) => {
                     }
                 }
             });
-            console.log('saved data');
             resolve('saved');
         });
     });
@@ -115,7 +111,6 @@ const storePlant = data => {
                 } catch{
                     console.log('no message: no client connected');
                 }
-
                 reject(err);
             }
 
