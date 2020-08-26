@@ -1,6 +1,7 @@
-const telegraf = require("telegraf");
-const dbService = require('./dbService');
-const fetch = require('node-fetch');
+const telegraf = require("telegraf"),
+    dbService = require('./dbService'),
+    fetch = require('node-fetch'),
+    { infoLog, warnLog } = require('./loggerService');
 require("dotenv").config();
 
 
@@ -33,15 +34,16 @@ bot.start((ctx) => {
 
 bot.help((ctx) => ctx.reply('Frag mich nach den Pflanzen, ich weiss Bescheid.'));
 bot.on('sticker', (ctx) => ctx.reply('👍'));
-bot.on('gif', (ctx) => ctx.reply('Hau bloos mit dem Zeug ab'));
-bot.catch((err, ctx) => console.log(`Ooops, encountered an error for ${ctx.updateType}`, err));
+bot.catch((err, ctx) => {
+    infoLog(`BOT-ERROR, ${ctx.updateType}, ${err}`);
+    ctx.reply('Fehler in der Verarbeitung der Eingabe. Log-Eintrag wurde erstellt.');
+});
 
 bot.on('message', (ctx) => {
 
     if (ctx.message.text) {
         if (ctx.message.text.match(regex)) {
-            console.log('match');
-            console.log(ctx.message.text);
+
             //match
             t = 0;
             dbService.getPlants()
@@ -61,6 +63,7 @@ bot.on('message', (ctx) => {
 
                 })
                 .catch(err => {
+                    warnLog(`BOT-ERROR at asking db for plants ${err}`);
                     return ctx.reply(`Die Datenbank antwortet nicht, da ist was faul.\n du musst für mich mal nachschauen.\n hier die Meldung: ${err.message}`);
                 })
 
@@ -75,8 +78,6 @@ bot.on('message', (ctx) => {
 
             return ctx.reply(`du nuschelst so... \nWenn Du was zu deinen Pflanzen wissen willst, dann frag doch einfach.\n aber sprich deutlich.`);
         }
-    } else {
-        console.log(ctx.message);
     }
 });
 

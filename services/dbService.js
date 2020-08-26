@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-//dbModel
-const Plant = require('../models/Plant');
-const Reading = require('../models/Reading');
-const sendStatus = require('../server');
+const mongoose = require('mongoose'),
+    Plant = require('../models/Plant'),
+    Reading = require('../models/Reading'),
+    { infoLog, warnLog } = require('./loggerService'),
+    sendStatus = require('../server');
 
 
 
@@ -17,8 +17,7 @@ const connectDB = async () => {
         });
         console.log(`Mongo connected: ${conn.connection.host}`);
     } catch (err) {
-        console.log(`Error at mongoose.connectDB: ${err}`);
-        console.log(process.env.MONGO_URL);
+        warnLog(`Error at mongoose.connectDB: ${err}`);
         process.exit(1);
     }
 };
@@ -28,7 +27,7 @@ const getPlants = () => {
     return new Promise((resolve, reject) => {
         Plant.find({ active: true }, (err, plants) => {
             if (err) {
-                console.log('error at plants from db' + err);
+                warnLog(`DB-ERROR at getPlants ${err}`);
                 reject(err);
             } else {
                 resolve(plants);
@@ -41,7 +40,7 @@ const getPlantName = (_plantId) => {
     return new Promise((resolve, reject) => {
         Plant.find({ plantId: _plantId }, (err, plant) => {
             if (err) {
-                console.log('error at plants from db' + err);
+                warnLog(`DB-ERROR at getPlantName ${err}`);
                 reject(err);
             } else {
                 resolve(plant.name);
@@ -56,7 +55,7 @@ const getPlantReadings = (pId) => {
         if (!pId) reject('invalid id');
         Reading.find({ plantId: pId }, (err, readings) => {
             if (err) {
-                console.log('error from db' + err);
+                warnLog(`DB-ERROR at getPlantReadings ${err}`);
                 reject(err);
             } else {
                 resolve(readings);
@@ -75,23 +74,20 @@ const storeReading = (data) => {
             if (err) {
                 try {
                     sendStatus.sendMsg(JSON.stringify({ "type": "error", "msg": err }));
-                } catch{
-                    console.log('no message: no client connected or db error');
-                }
-
+                } catch (err) { }
+                warnLog(`DB-ERROR at storeReading ${err}`);
                 reject(err);
             }
             //send plant together with update message to frontend
             Plant.find({ active: true, plantId: data.plantId }, (err, plant) => {
                 if (err) {
+                    warnLog(`DB-ERROR at findPlant in StoreReading ${err}`);
                     reject(err);
                 } else {
                     //console.log('plants from db ' + plant);
                     try {
                         sendStatus.sendMsg(JSON.stringify({ "type": "update", "plant": plant })); // <---- websocket message to frontend for updating dashboard.
-                    } catch (err) {
-                        console.log('no message: no client connected ' + err);
-                    }
+                    } catch (err) { }
                 }
             });
             resolve('saved');
@@ -105,25 +101,23 @@ const storePlant = data => {
         let plant = new Plant(data);
         plant.save((err) => {
             if (err) {
-                console.log('ERROR at storing Plant ' + err);
+
                 try {
                     sendStatus.sendMsg(JSON.stringify({ "type": "error", "msg": err }));
-                } catch{
-                    console.log('no message: no client connected');
-                }
+                } catch{ }
+                warnLog(`DB-ERROR at storePlant ${err}`);
                 reject(err);
             }
 
             //send plant together with update message to frontend
             Plant.find({ active: true, plantId: data.plantId }, (err, plant) => {
                 if (err) {
+                    warnLog(`DB-ERROR at findPlant in storePlant ${err}`);
                     reject(err);
                 } else {
                     try {
                         sendStatus.sendMsg(JSON.stringify({ "type": "update", "plant": plant })); // <---- websocket message to frontend for updating dashboard.
-                    } catch (err) {
-                        console.log('no message: no client connected ' + err);
-                    }
+                    } catch (err) { }
                 }
             });
             resolve('saved');
@@ -136,11 +130,13 @@ const updatePlants = (data) => {
         //console.log('received at updatePlants\n' + data);
         Plant.updateOne({ plantId: data.plantId }, { $set: { name: data.name, pos: data.pos, active: data.active } }, (err, numAffected) => {
             if (err) {
+                warnLog(`DB-ERROR at updatePlants ${err}`);
                 reject(err)
             } else {
                 //send plant together with update message to frontend
                 Plant.find({ active: true, plantId: data.plantId }, (err, plant) => {
                     if (err) {
+                        warnLog(`DB-ERROR at findPlant in updatePlants ${err}`);
                         reject(err);
                     } else {
                         //console.log('plants from db ' + plant);
@@ -162,6 +158,7 @@ const deletePlant = (plantId) => {
         //console.log('received at updatePlants\n' + data);
         Plant.updateOne({ plantId: plantId }, { $set: { active: false } }, (err, numAffected) => {
             if (err) {
+                warnLog(`DB-ERROR at deletePlant ${err}`);
                 reject(err)
             } else {
                 //send plant together with update message to frontend
@@ -175,7 +172,7 @@ const getNewId = () => {
     return new Promise((resolve, reject) => {
         Plant.find({}, (err, plants) => {
             if (err) {
-                console.log('error at plants from db' + err);
+                warnLog(`DB-ERROR at getNewId ${err}`);
                 reject(err);
             } else {
                 let currentMaxId;

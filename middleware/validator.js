@@ -1,4 +1,5 @@
-const { check, body, query, validationResult } = require('express-validator');
+const { check, body, query, validationResult } = require('express-validator'),
+    { infoLog, warnLog } = require('../services/loggerService');
 
 
 const getValRules = (req, res, next) => {
@@ -25,7 +26,7 @@ const validate = (req, res, next) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('Validation ERROR');
+        infoLog(`VALIDATION-ERROR ${errors[0]}`);
         return res.status(422).send('invalid input');
     }
     return next();

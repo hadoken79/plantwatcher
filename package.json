@@ -17,6 +17,7 @@
     "helmet": "^3.23.3",
     "mongoose": "^5.9.26",
     "path": "^0.12.7",
+    "simple-node-logger": "^18.12.24",
     "sortablejs": "^1.10.2",
     "telegraf": "^3.38.0",
     "ws": "^7.3.1"
