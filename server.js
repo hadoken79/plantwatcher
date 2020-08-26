@@ -75,6 +75,8 @@ server.listen(port, () => {
 });
 
 
+
+
 //websocket-server to connect with client. communication over port 8080. needs to be maped in container
 let wss = new webSocketServer({ port: 8080 });
 //wss.setMaxListeners(1000);

@@ -5,9 +5,6 @@ const Reading = require('../models/Reading');
 const sendStatus = require('../server');
 
 
-const initDB = async () => {
-
-}
 
 const connectDB = async () => {
     try {
@@ -16,6 +13,7 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,
+            useCreateIndex: true,
         });
         console.log(`Mongo connected: ${conn.connection.host}`);
     } catch (err) {
@@ -26,6 +24,7 @@ const connectDB = async () => {
 };
 
 const getPlants = () => {
+
     return new Promise((resolve, reject) => {
         Plant.find({ active: true }, (err, plants) => {
             if (err) {
@@ -38,6 +37,20 @@ const getPlants = () => {
         }).sort({ pos: 1 });
     });
 };
+
+const getPlantName = (_plantId) => {
+    return new Promise((resolve, reject) => {
+        Plant.find({ plantId: _plantId }, (err, plant) => {
+            if (err) {
+                console.log('error at plants from db' + err);
+                reject(err);
+            } else {
+                //console.log('plants from db ' + plant);
+                resolve(plant.name);
+            }
+        }).sort({ pos: 1 });
+    });
+}
 
 const getPlantReadings = (pId) => {
     //console.log('getMessures called ' + pId);
@@ -58,14 +71,15 @@ const getPlantReadings = (pId) => {
 
 const storeReading = (data) => {
     return new Promise((resolve, reject) => {
-        console.log('received ' + data);
+        console.log(data);
+
         let reading = new Reading(data);
         reading.save((err) => {
             if (err) {
                 try {
                     sendStatus.sendMsg(JSON.stringify({ "type": "error", "msg": err }));
                 } catch{
-                    console.log('no message: no client connected');
+                    console.log('no message: no client connected or db error');
                 }
 
                 reject(err);
@@ -83,6 +97,7 @@ const storeReading = (data) => {
                     }
                 }
             });
+            console.log('saved data');
             resolve('saved');
         });
     });
@@ -189,5 +204,6 @@ module.exports = {
     updatePlants,
     getNewId,
     storePlant,
-    deletePlant
+    deletePlant,
+    getPlantName
 };

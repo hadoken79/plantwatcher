@@ -11,6 +11,7 @@ DBNAME=yourDBName
 DB_ADMIN=yourRootUserName
 DB_ADMIN_PW=yourRootPassword
 
+BOT_TOKEN=yourTrelloBotToken
 
 #db.createUser(
 #{

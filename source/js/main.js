@@ -3,16 +3,14 @@ import { drawLineChart, drawGauge } from './charts.js';
 import { getDataFromBackend, updatePlant } from './com.js';
 import { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete } from './DashboardSettings';
 import { drawToast } from './toasts';
-//import { permittedCrossDomainPolicies } from 'helmet';
-//import { reject } from 'lodash';
-//import { resolve } from 'path';
+
 
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //connection with websocketserver.js Port 8080 (nativ html5)
     //-------Sockets-----------------------------------------------------
-    let ws = new WebSocket('ws://192.168.0.74:8080');
+    let ws = new WebSocket('ws://127.0.0.1:8080');//works only for local development!!!!!!!!!!!!! otherwise use domain or server IP
     ws.onopen = () => {
         console.log('websocket to host connected ...');
         ws.send('client listening');

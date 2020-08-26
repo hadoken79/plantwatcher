@@ -1,4 +1,5 @@
 const dbService = require('../services/dbService');
+const botService = require('../services/botService');
 
 const getPlants = (req, res) => {
     //call dbService
@@ -29,6 +30,15 @@ const getPlantReadings = (req, res) => {
 const storeReadings = (req, res) => {
     //console.log(req.body);
     //console.log(req.body.hum);
+
+    if (req.body.hum > 101) {//Testwert => immer wahr
+        dbService.getPlantName(req.body.plantId).then(name => {
+            botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh nachsehen.`);
+        }).catch(err => {
+            botService.sendMsg(`Habe kritische Werte erhalten, kann aber nicht festmachen welche Pflanze, da klemmt was in der Datenbank.`);
+        })
+
+    }
 
     dbService
         .storeReading(req.body)
