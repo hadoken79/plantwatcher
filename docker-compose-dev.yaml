@@ -11,7 +11,7 @@ services:
     ports:
       - 80:3000 #app
       - 8080:8080 #socketServer
-    command: npm run dev
+    command: npm run dev #while development run webpack --watch in a second terminal for sass->css live conversion, or use other compiler
     links: 
       - mongo
     volumes:
