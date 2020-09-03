@@ -1,6 +1,5 @@
 const telegraf = require("telegraf"),
     dbService = require('./dbService'),
-    fetch = require('node-fetch'),
     { infoLog, warnLog } = require('./loggerService');
 require("dotenv").config();
 
@@ -57,7 +56,7 @@ bot.on('message', (ctx) => {
                                 if (readings.length < 1) {
                                     return ctx.reply(`${plant.name}: noch keine Daten`);
                                 }
-                                return ctx.reply(`${plant.name}: ${readings[0].hum}\n`)
+                                return ctx.reply(`${plant.name}: ${readings[readings.length - 1].hum}\n`)
                             })
                     });
 
@@ -100,15 +99,8 @@ bot.launch();
 
 const sendMsg = (msg) => {
 
-    /* fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/getUpdates`).then(response => {
-        if (response.ok) {
-            return response.json();
-        }
-    }).then(body => {
-        console.log(body);
-    }) */
 
-    bot.telegram.sendMessage(chatId, msg);
+    if (chatId) bot.telegram.sendMessage(chatId, msg).catch(err => warnLog(`BOT-ERROR ${err}`));
 
 };
 

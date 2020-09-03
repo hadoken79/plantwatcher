@@ -1,4 +1,4 @@
-//require('./style.scss'); //adding styling for webpack
+require('./style.scss'); //adding styling for webpack
 import { drawLineChart, drawGauge } from './charts.js';
 import { getDataFromBackend, updatePlant } from './com.js';
 import { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete } from './DashboardSettings';

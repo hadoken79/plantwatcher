@@ -13,30 +13,38 @@
 //RTC_DATA_ATTR int bootCount = 0; //even if just declared, power will stay switched on, even when defined of in sleep configuration
 
 //init vars
-const int plant_1_pin = 32; // = ADC1_CHANNEL 4. analog pin for reading values. needs to be a ADC1 pin. ADC2 ports are blocked when wifi is used!. multiple plants could be messured with one mc. varnumber represents plantId
-const int bat_pin = 33; // = ADC1_CHANNEL 5
+const int plant_1_pin = 36; // = Needs to be a ADC1 pin. ADC2 ports are blocked when wifi is used!. multiple plants could be messured with one mc. varnumber represents plantId
+const int bat_pin = 34;
 const int sensorPowerPin = 25;
+
   int potValue;
   int humVal;
   int tries;
-  bool debug = true; //toggle Serialoutput for debuging
+  
   //char api[] = "http://jsonplaceholder.typicode.com/posts";
   char api[] = "http://192.168.0.74/api/postReadings";
+  
   //reference values for specific sensor
-  int maxWetValue = 1100; 
-  int maxDryValue = 2000;
+  int maxWetValue = 1200; 
+  int maxDryValue = 3100;
+
 
 
   
 void setup() {
-      //adc1_config_channel_atten(ADC1_CHANNEL_4,ADC_ATTEN_DB_0);//no voltage reduction on pin for this sensor
-      //adc1_config_channel_atten(ADC1_CHANNEL_5,ADC_ATTEN_DB_0);//11 = max voltage reduction 
+
       //bootCount ++;
-     pinMode(ADC1_CHANNEL_4, INPUT_PULLDOWN);
-     pinMode(ADC1_CHANNEL_5, INPUT_PULLDOWN);
+     //pinMode(ADC1_CHANNEL_4, INPUT_PULLDOWN);
+     //pinMode(ADC1_CHANNEL_5, INPUT_PULLDOWN);
+     
+     pinMode(LED_BUILTIN, OUTPUT);
+     digitalWrite(LED_BUILTIN, LOW);//shutdown internal led to safe power
+     pinMode(sensorPowerPin, OUTPUT);//only toggle voltage directly before taking messure
+  
      resetVals();
      Serial.begin(115200);
-     delay(500);
+     delay(300);
+     
      Serial.println("booting...");
      //Serial.print("bootcount: ");
      //Serial.println(bootCount);
@@ -45,8 +53,8 @@ void setup() {
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
-          //esp_sleep_enable_timer_wakeup(21600e6);6h
-          esp_sleep_enable_timer_wakeup(20e6);//testduration
+          //esp_sleep_enable_timer_wakeup(21600e6);//6h
+          esp_sleep_enable_timer_wakeup(3600e6);//testduration
 }
 
 void loop() {
@@ -58,12 +66,12 @@ void loop() {
     //eg sendData(api, ,2, messureHumidity(plant_2_pin));
     
     WiFi.disconnect();
-    if(debug)Serial.println("going to take a nap");
+    Serial.println("going to take a nap");
      esp_deep_sleep_start();
    }else{
-    if(debug)Serial.println("failed to connect to wifi");
+    Serial.println("failed to connect to wifi");
         //go back to sleep and try next time
-        if(debug)Serial.println("going to take a nap");
+        Serial.println("going to take a nap");
          esp_deep_sleep_start();
    }
 
@@ -75,58 +83,61 @@ bool ConnectToWiFi()
  
   WiFi.mode(WIFI_STA);
   WiFi.begin(SSID, WiFiPassword);
-    if(debug){
-      Serial.print("Connecting to ");
-      Serial.println(SSID);
-    }
+
+      //Serial.print("Connecting to ");
+      //Serial.println(SSID);
+
       
   uint8_t i = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
-      if(debug) Serial.print('.');
-       
+    Serial.print('.'); 
     delay(500);
  
     if ((++i % 16) == 0)
     {
-        //if(debug)Serial.println(F(" still trying to connect"));   
+        Serial.println(F(" still trying to connect"));   
         return false;
     }
   }
-   if(debug){
     Serial.print(F("Connected. My IP address is: "));
     Serial.println(WiFi.localIP());
-   }
+   
   return true;
 }
 
 int messureHumidity(int potPin){
 
-  //set voltage to pin
-  digitalWrite(sensorPowerPin, HIGH);
-  delay(2000);
-  potValue = analogRead(potPin);
+  //power up messure pin
+    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(sensorPowerPin, HIGH);
+    delay(300);
+    potValue = analogRead(potPin);
   
-  //unset voltage
-  digitalWrite(sensorPowerPin, LOW);//shut power to sensor of
-  humVal = map(potValue, maxDryValue, maxWetValue, 1, 99);
+    if(potValue < 950)potValue = 4000;//in case of voltage drop messure 0 
 
   
+  //powerof pin
+  digitalWrite(sensorPowerPin, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
+
+  //translate value to readable range
+  humVal = map(potValue, maxDryValue, maxWetValue, 1, 99);
+
+  //limit values outside of defined range (gauche in frontend has range of 1-99)
   if(humVal > 99)
     humVal = 99;
 
   if(humVal < 1)
     humVal = 1;
   
-  if(debug){
-  Serial.println(potValue);
-  }
+  
   return humVal;
 }
 
 bool sendData(char api[],int plantId, int val){
-  if(debug)Serial.print("sending data ");
-  if(debug)Serial.println(val);
+  Serial.print("sending data ");
+  Serial.println(val);
 
    int batterieLevel = powerCheck();
    
@@ -136,9 +147,9 @@ bool sendData(char api[],int plantId, int val){
         http.begin(api);
         http.addHeader("Content-Type", "application/json");
 
-        if(debug)Serial.print("[HTTP] POST...\n");
+        Serial.print("[HTTP] POST...\n");
         
-        // start connection and send HTTP header
+        // start connection and send HTTP message
         int httpResponseCode = http.POST("{\"plantId\": " + String(plantId) + ", \"hum\": " + String(val) + ", \"power\": " + String(batterieLevel) + "}"); //Send the actual POST request as json
 
 
@@ -146,15 +157,13 @@ bool sendData(char api[],int plantId, int val){
         if(httpResponseCode > 0) {
           
                // HTTP header has been send and Server response header has been handled
-               if(debug)Serial.printf("[HTTP] POST responsecode: %d\n", httpResponseCode);
+               Serial.printf("[HTTP] POST responsecode: %d\n", httpResponseCode);
                String response = http.getString();
-               if(debug)Serial.println(response);
+               Serial.println(response);
               
-
-               //process answer
             
         } else {
-            if(debug)Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+            Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
             delay(500);
             if(tries++ < 2)sendData(api, plantId, val);//retry 2 more times in case of error
             resetVals();
@@ -205,10 +214,12 @@ void resetVals(){
 }
 
 int powerCheck(){
-  int bat = (map(analogRead(bat_pin), 2000, 4095, 0, 100));
-  if(debug){
-    Serial.print("batterieLevel ");
+  Serial.print("batraw");
+  Serial.println(analogRead(bat_pin));
+  int bat = (map(analogRead(bat_pin), 2000, 4095, 0, 100));//needs to be calibrated for every powersource and corresponding voltage
+
+    Serial.print("batteryLevel ");
     Serial.println(bat);
-  }
+  
   return bat;
 }

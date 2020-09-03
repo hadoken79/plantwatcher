@@ -4,6 +4,7 @@ const mongoose = require('mongoose'),
     { infoLog, warnLog } = require('./loggerService'),
     sendStatus = require('../server');
 
+let readCount = 0;
 
 
 const connectDB = async () => {
@@ -38,7 +39,7 @@ const getPlants = () => {
 
 const getPlantName = (_plantId) => {
     return new Promise((resolve, reject) => {
-        Plant.find({ plantId: _plantId }, (err, plant) => {
+        Plant.findOne({ plantId: _plantId }, (err, plant) => {
             if (err) {
                 warnLog(`DB-ERROR at getPlantName ${err}`);
                 reject(err);
@@ -68,8 +69,16 @@ const getPlantReadings = (pId) => {
 
 const storeReading = (data) => {
     return new Promise((resolve, reject) => {
+        console.log(`received Data ${readCount++}`);
+        let incomming = {
+            plantId: data.plantId,
+            hum: data.hum, //frontend needs value as string anyway
+            power: parseInt(data.power, 10),
+            date: undefined //use Schemas default
+        };
 
-        let reading = new Reading(data);
+
+        let reading = new Reading(incomming);
         reading.save((err) => {
             if (err) {
                 try {

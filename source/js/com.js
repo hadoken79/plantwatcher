@@ -20,6 +20,7 @@ const getDataFromBackend = (url) => {
                     plantId: 1,
                     hum: 36,
                     date: '2012-12-19T06:01:17.171Z',
+                    power: 99
                 },
                 {
                     plantId: 1,

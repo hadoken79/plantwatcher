@@ -24,9 +24,9 @@ const postValRules = (req, res, next) => {
 
 const validate = (req, res, next) => {
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        infoLog(`VALIDATION-ERROR ${errors[0]}`);
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        infoLog(`VALIDATION-ERROR ${result.errors[0].value} in ${result.errors[0].param}`);
         return res.status(422).send('invalid input');
     }
     return next();

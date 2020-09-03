@@ -1,8 +1,7 @@
 const router = require('express').Router(),
     dashboardController = require('../controllers/dashboardController'),
     apiController = require('../controllers/apiController'),
-    { postValRules, getValRules, validate, } = require('../middleware/validator'),
-    { check, body, query, validationResult } = require('express-validator');
+    { postValRules, getValRules, validate, } = require('../middleware/validator');
 
 router.get('/', dashboardController.renderDashboard);
 

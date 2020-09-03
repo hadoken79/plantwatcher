@@ -61,7 +61,7 @@ wss.on('connection', (ws) => {
     });
     ws.on('close', () => {
         console.log('socket-connection closed');
-        setTimeout(connect, 5000); //re-connect after 5 seconds
+        //setTimeout(connect, 5000); //re-connect after 5 seconds
     });
 
     module.exports.sendMsg = (msg) => {
