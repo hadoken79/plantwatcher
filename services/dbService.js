@@ -71,7 +71,7 @@ const getPlantReadings = (pId) => {
 
 const storeReading = (data) => {
     return new Promise((resolve, reject) => {
-        console.log(`received Data ${readCount++}`);
+        //console.log(`received Data ${readCount++}`);
         let incomming = {
             plantId: data.plantId,
             hum: data.hum, //frontend needs value as string anyway

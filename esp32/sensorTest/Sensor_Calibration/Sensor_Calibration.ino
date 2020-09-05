@@ -35,6 +35,8 @@ void loop() {
   digitalWrite(sensorPowerPin, HIGH);
   delay(500);
   potValue = analogRead(potPin);
+    delay(500);
+    
   if(potValue < 500)potValue = 4000;
   //Serial.print("analog val: ");
   Serial.println(potValue);
@@ -42,9 +44,9 @@ void loop() {
   //humVal = map(potValue, dryValue, wetValue, 1, 99);
   humVal = map(potValue, 3100, 1100, 1, 99);
   //Serial.println(potValue);
-  Serial.println(humVal);
-  delay(500);
-    digitalWrite(LED_BUILTIN, LOW);
+  //Serial.println(humVal);
+
+    //digitalWrite(LED_BUILTIN, LOW);
   digitalWrite(sensorPowerPin, LOW);
 
   delay(1000);

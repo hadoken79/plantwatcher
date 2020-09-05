@@ -15,6 +15,7 @@ BOT_TOKEN=yourTrelloBotToken
 WEATHER_API_KEY=yourApiKey
 WEATHER_POS_LAT=yourLatitude
 WEATHER_POS_LON=yourLongitude
+WEATHER_UNITS=[metric,imperial]
 
 #db.createUser(
 #{

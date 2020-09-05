@@ -45,3 +45,5 @@ Error: 400: Bad Request: chat_id is empty
 Error: 400: Bad Request: chat_id is empty
     at /home/app/node_modules/telegraf/core/network/client.js:281:17
     at processTicksAndRejections (internal/process/task_queues.js:97:5) 
+2020-09-05 11:29:15.401 WARN  WEATHER-ERROR at getWeatherData ReferenceError: WEATHER_UNITS is not defined 
+2020-09-05 11:29:19.845 WARN  WEATHER-ERROR at getWeatherData ReferenceError: WEATHER_UNITS is not defined 

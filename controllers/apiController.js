@@ -37,7 +37,7 @@ const getPlantReadings = (req, res) => {
 const storeReadings = (req, res) => {
 
     //console.log(req.body);
-    if (req.body.hum < 30) {
+    if (req.body.hum < 60) {//notify user if value is to low
 
         dbService.getPlantName(req.body.plantId).then(name => {
 

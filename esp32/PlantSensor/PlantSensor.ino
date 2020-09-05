@@ -26,7 +26,7 @@ const int sensorPowerPin = 25;
   
   //reference values for specific sensor
   int maxWetValue = 1200; 
-  int maxDryValue = 2500;
+  int maxDryValue = 3000;
 
 
 
@@ -108,8 +108,8 @@ bool ConnectToWiFi()
 
 int messureHumidity(int potPin){
 
-  //power up messure pin
-    //digitalWrite(LED_BUILTIN, HIGH);
+    //power up messure pin
+    digitalWrite(LED_BUILTIN, HIGH);//for some fucked up reason, sensor reads lower values when led not pulled high bevor reading.....
     digitalWrite(sensorPowerPin, HIGH);
     delay(300);
     potValue = analogRead(potPin);
@@ -117,20 +117,20 @@ int messureHumidity(int potPin){
     if(potValue < 950)potValue = 4000;//in case of voltage drop messure 0 
 
   
-  //powerof pin
-  digitalWrite(sensorPowerPin, LOW);
-  //digitalWrite(LED_BUILTIN, LOW);
-
   //translate value to readable range
   humVal = map(potValue, maxDryValue, maxWetValue, 1, 99);
 
-  //limit values outside of defined range (gauche in frontend has range of 1-99)
+  //limit values outside of defined range (gauge in frontend has range of 1-99)
   if(humVal > 99)
     humVal = 99;
 
   if(humVal < 1)
     humVal = 1;
-  
+    
+    //powerof pin
+  digitalWrite(sensorPowerPin, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
+
   
   return humVal;
 }
