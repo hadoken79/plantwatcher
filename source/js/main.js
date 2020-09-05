@@ -165,7 +165,7 @@ const fillCardWithData = (plant, readings, elements) => {
         drawLineChart(readings, lineArea);
 
         //put timestamp for latest update at bottom
-        let latestDataUpdate = new Date(readings[0].date);
+        let latestDataUpdate = new Date(readings[readings.length - 1].date);
 
         lastUpdate.innerHTML = `letztes Update:<br> ${latestDataUpdate.toDateString()} | ${latestDataUpdate.toLocaleTimeString()}`;
 

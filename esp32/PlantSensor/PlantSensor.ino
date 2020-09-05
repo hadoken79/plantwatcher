@@ -26,7 +26,7 @@ const int sensorPowerPin = 25;
   
   //reference values for specific sensor
   int maxWetValue = 1200; 
-  int maxDryValue = 3100;
+  int maxDryValue = 2500;
 
 
 
@@ -42,10 +42,10 @@ void setup() {
      pinMode(sensorPowerPin, OUTPUT);//only toggle voltage directly before taking messure
   
      resetVals();
-     Serial.begin(115200);
-     delay(300);
+     //Serial.begin(115200);
+     //delay(300);
      
-     Serial.println("booting...");
+     //Serial.println("booting...");
      //Serial.print("bootcount: ");
      //Serial.println(bootCount);
       
@@ -53,8 +53,8 @@ void setup() {
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
           esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
-          //esp_sleep_enable_timer_wakeup(21600e6);//6h
-          esp_sleep_enable_timer_wakeup(3600e6);//testduration
+          esp_sleep_enable_timer_wakeup(21600e6);//6h
+          //esp_sleep_enable_timer_wakeup(3600e6);//testduration
 }
 
 void loop() {
@@ -66,12 +66,12 @@ void loop() {
     //eg sendData(api, ,2, messureHumidity(plant_2_pin));
     
     WiFi.disconnect();
-    Serial.println("going to take a nap");
+    //Serial.println("going to take a nap");
      esp_deep_sleep_start();
    }else{
-    Serial.println("failed to connect to wifi");
+    //Serial.println("failed to connect to wifi");
         //go back to sleep and try next time
-        Serial.println("going to take a nap");
+        //Serial.println("going to take a nap");
          esp_deep_sleep_start();
    }
 
@@ -91,17 +91,17 @@ bool ConnectToWiFi()
   uint8_t i = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
-    Serial.print('.'); 
+    //Serial.print('.'); 
     delay(500);
  
     if ((++i % 16) == 0)
     {
-        Serial.println(F(" still trying to connect"));   
+        //Serial.println(F(" still trying to connect"));   
         return false;
     }
   }
-    Serial.print(F("Connected. My IP address is: "));
-    Serial.println(WiFi.localIP());
+    //Serial.print(F("Connected. My IP address is: "));
+    //Serial.println(WiFi.localIP());
    
   return true;
 }
@@ -109,7 +109,7 @@ bool ConnectToWiFi()
 int messureHumidity(int potPin){
 
   //power up messure pin
-    digitalWrite(LED_BUILTIN, HIGH);
+    //digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(sensorPowerPin, HIGH);
     delay(300);
     potValue = analogRead(potPin);
@@ -119,7 +119,7 @@ int messureHumidity(int potPin){
   
   //powerof pin
   digitalWrite(sensorPowerPin, LOW);
-  digitalWrite(LED_BUILTIN, LOW);
+  //digitalWrite(LED_BUILTIN, LOW);
 
   //translate value to readable range
   humVal = map(potValue, maxDryValue, maxWetValue, 1, 99);
@@ -136,8 +136,8 @@ int messureHumidity(int potPin){
 }
 
 bool sendData(char api[],int plantId, int val){
-  Serial.print("sending data ");
-  Serial.println(val);
+  //Serial.print("sending data ");
+  //Serial.println(val);
 
    int batterieLevel = powerCheck();
    
@@ -147,7 +147,7 @@ bool sendData(char api[],int plantId, int val){
         http.begin(api);
         http.addHeader("Content-Type", "application/json");
 
-        Serial.print("[HTTP] POST...\n");
+        //Serial.print("[HTTP] POST...\n");
         
         // start connection and send HTTP message
         int httpResponseCode = http.POST("{\"plantId\": " + String(plantId) + ", \"hum\": " + String(val) + ", \"power\": " + String(batterieLevel) + "}"); //Send the actual POST request as json
@@ -157,13 +157,13 @@ bool sendData(char api[],int plantId, int val){
         if(httpResponseCode > 0) {
           
                // HTTP header has been send and Server response header has been handled
-               Serial.printf("[HTTP] POST responsecode: %d\n", httpResponseCode);
+               //Serial.printf("[HTTP] POST responsecode: %d\n", httpResponseCode);
                String response = http.getString();
-               Serial.println(response);
+               //Serial.println(response);
               
             
         } else {
-            Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+            //Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
             delay(500);
             if(tries++ < 2)sendData(api, plantId, val);//retry 2 more times in case of error
             resetVals();

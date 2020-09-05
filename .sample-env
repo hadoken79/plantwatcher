@@ -12,6 +12,9 @@ DB_ADMIN=yourRootUserName
 DB_ADMIN_PW=yourRootPassword
 
 BOT_TOKEN=yourTrelloBotToken
+WEATHER_API_KEY=yourApiKey
+WEATHER_POS_LAT=yourLatitude
+WEATHER_POS_LON=yourLongitude
 
 #db.createUser(
 #{

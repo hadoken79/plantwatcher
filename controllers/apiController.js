@@ -1,10 +1,13 @@
 const dbService = require('../services/dbService'),
     botService = require('../services/botService'),
+    weatherService = require('../services/weatherService'),
     { infoLog, warnLog } = require('../services/loggerService');
 
 const getPlants = (req, res) => {
     //call dbService
     //respond in json
+    getWeatherData();
+
     dbService
         .getPlants()
         .then((plants) => {
@@ -111,6 +114,10 @@ const getNewId = (req, res) => {
         });
 }
 
+const getWeatherData = (req, res) => {
+    weatherService.getWeatherData();
+};
+
 
 module.exports = {
     getPlants,
@@ -119,5 +126,6 @@ module.exports = {
     updatePlants,
     getNewId,
     storePlant,
-    deletePlant
+    deletePlant,
+    getWeatherData
 };

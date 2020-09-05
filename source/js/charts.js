@@ -3,6 +3,7 @@ import styles from './style.scss';
 import { createWebSocketStream } from 'ws';
 
 const drawLineChart = (readings, parent) => {
+    readings = readings.reverse();
     if (!parent) {
         console.log('Error! do LineArea found in html');
         return;
@@ -59,7 +60,7 @@ const drawGauge = (readings, parent) => {
         return;
     }
 
-    let latestVal = readings[readings.length - 1].hum.toString(); //value works somehow only as string
+    let latestVal = readings[0].hum.toString(); //value works somehow only as string
     let arcColor1;
 
     //colormapping

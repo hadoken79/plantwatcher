@@ -56,7 +56,7 @@ bot.on('message', (ctx) => {
                                 if (readings.length < 1) {
                                     return ctx.reply(`${plant.name}: noch keine Daten`);
                                 }
-                                return ctx.reply(`${plant.name}: ${readings[readings.length - 1].hum}\n`)
+                                return ctx.reply(`${plant.name}: ${readings[0].hum}\n`)
                             })
                     });
 

@@ -62,8 +62,10 @@ const getPlantReadings = (pId) => {
                 resolve(readings);
             }
         })
+
             .sort({ date: -1 })
             .limit(10);
+
     });
 };
 
@@ -76,7 +78,7 @@ const storeReading = (data) => {
             power: parseInt(data.power, 10),
             date: undefined //use Schemas default
         };
-
+        console.log(incomming);
 
         let reading = new Reading(incomming);
         reading.save((err) => {
