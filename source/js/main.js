@@ -3,6 +3,7 @@ import { drawLineChart, drawGauge } from './charts.js';
 import { getDataFromBackend, updatePlant } from './com.js';
 import { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete } from './DashboardSettings';
 import { drawToast } from './toasts';
+import { renderWeatherWidget } from './weather';
 
 
 
@@ -53,7 +54,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('deleteModal').classList.remove('is-active');
     })
 
-
+    getDataFromBackend('/api/getWeather').then(data => { renderWeatherWidget(data) });
 });
 
 

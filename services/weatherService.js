@@ -19,9 +19,9 @@ const getWeatherData = () => {
 
 
                 let raw = JSON.parse(data);
-                console.log(raw.daily);
+                //console.log(raw.daily);
 
-                resolve();
+                resolve(raw.daily);
             });
 
         }).on("error", (err) => {
@@ -36,7 +36,7 @@ const getWeatherData = () => {
 // var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 // var dayOfWeek = days[a.getDay()]
 
-//https://api.openweathermap.org/data/2.5/onecall?lat=47.550910&lon=7.536470&exclude=current,minutely,hourly&appid=4fb79765aaa15cae2e6394c2733e6364
+
 
 module.exports = {
     getWeatherData

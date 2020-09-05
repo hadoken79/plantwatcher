@@ -6,7 +6,7 @@ const dbService = require('../services/dbService'),
 const getPlants = (req, res) => {
     //call dbService
     //respond in json
-    getWeatherData();
+
 
     dbService
         .getPlants()
@@ -115,7 +115,14 @@ const getNewId = (req, res) => {
 }
 
 const getWeatherData = (req, res) => {
-    weatherService.getWeatherData();
+    weatherService.getWeatherData()
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            warnLog(`WEATHER-ERROR at getWeatherData ${err}`);
+            res.status(500).send(err);
+        })
 };
 
 

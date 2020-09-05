@@ -11,6 +11,8 @@ router.get('/api/getPlantReadings', getValRules(), validate, apiController.getPl
 
 router.get('/api/getNewId', getValRules(), validate, apiController.getNewId);
 
+router.get('/api/getWeather', getValRules(), validate, apiController.getWeatherData);
+
 router.post('/api/postReadings', postValRules(), validate, apiController.storeReadings);
 router.post('/api/postPlant', postValRules(), validate, apiController.storePlant);
 router.post('/api/deletePlant', postValRules(), validate, apiController.deletePlant);
