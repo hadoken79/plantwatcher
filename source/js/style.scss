@@ -114,6 +114,7 @@
   &::-webkit-scrollbar { //hide scrolbars but keep behavior
     display: none;
   }
+  scrollbar-width: none;//to hide scrolbar also in firefox
 
 }
 .weatherData{
