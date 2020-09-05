@@ -1,4 +1,4 @@
-import { drawToast } from "./toasts";
+import { drawToast } from './toasts';
 
 const getDataFromBackend = (url) => {
 

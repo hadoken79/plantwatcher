@@ -14,16 +14,12 @@ export const renderWeatherWidget = async (data) => {
 
 const buildWeatherBlock = (day) => {
     return new Promise((resolve, reject) => {
-        //console.log(day);
 
         //get temp day and icon from rawdata
         let temp = Math.round(day.temp.day);
         let dayTs = day.dt;
         let apiIcon = day.weather[0].icon;
 
-
-
-        //console.log(temp, dayTs, apiIcon);
 
         //map timestamp to day
         let millis = new Date(dayTs * 1000);
@@ -43,7 +39,6 @@ const buildWeatherBlock = (day) => {
             '50d': { 'code': 'fas fa-smog', 'color': 'has-text-grey-lighter' }
         }
 
-        console.log(faIcons[apiIcon].color);
         //create weatherBlock
         let wrapper = document.createElement('div');
         wrapper.className = 'weatherData';
