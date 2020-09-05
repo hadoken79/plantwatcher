@@ -7,7 +7,8 @@ export const renderWeatherWidget = async (data) => {
             let dayElement = await buildWeatherBlock(day);
             container.appendChild(dayElement);
         }
-
+        container.classList.remove('is-hidden');
+        container.classList.add('blendin');
     }
 }
 
