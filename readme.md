@@ -12,6 +12,7 @@ the sensors in my case are build with esp32 microcontrollers and capacitive humi
 But anything will work, as long as data is transfered over wifi to server api. Data has to be in json format.
 `"{\"plantId\": "\1\", \"hum\": \"66\", \"power\": \"99\"}"`
 Humvals have to be between 1 and 99.
+Code for esp32 is provided in esp32 folder.
 
 
 *all static files are generated with webpack*
@@ -22,12 +23,13 @@ the styling ist made with sass bulma.
 *installaion*
 1. pull this repo to local folder
 2. rename sample-env in .env and replace example values with your data
-3. run docker-compose up --build in terminal from application-root folder
-4. bash in mongo container. ('auth' has been enabled during build, in docker-compose)
+3. update ipaddress for your server in esp32 code (if needed) and in main.js for websocket connection. if your run this app on a public server (not recomended) you could use your domain instead of ip.
+4. run docker-compose up --build in terminal from application-root folder
+5. bash in mongo container. ('auth' has been enabled during build, in docker-compose)
 `docker exec -it plant_mongo /bin/bash`
-5. login as admin
+6. login as admin
 `mongo -u [your admin user in .env]`
-6. add user and db
+7. add user and db
 `db.createCollection([yourDBName])
 
 db.createUser(
@@ -40,4 +42,4 @@ db.createUser(
 })
 
 `
-6. restart application and navigate to your defined port.
+8. restart application and navigate to your defined port.
