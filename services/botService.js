@@ -1,6 +1,9 @@
 const telegraf = require("telegraf"),
     dbService = require('./dbService'),
-    { infoLog, warnLog } = require('./loggerService');
+    {
+        infoLog,
+        warnLog
+    } = require('./loggerService');
 require("dotenv").config();
 
 
@@ -98,7 +101,6 @@ bot.on('message', (ctx) => {
 bot.launch();
 
 const sendMsg = (msg) => {
-
 
     if (chatId) bot.telegram.sendMessage(chatId, msg).catch(err => warnLog(`BOT-ERROR ${err}`));
 
