@@ -35,8 +35,9 @@ In my case ~/arduino-1.8.13-linux64/arduino-1.8.13/libraries/Configuration
 6. login as admin
 `mongo -u [your admin user in .env]`
 7. add user and db
-`db.createCollection([yourDBName])
 
+```
+db.createCollection([yourDBName])
 db.createUser(
 {
     user: "[yourUserName]",
@@ -45,6 +46,6 @@ db.createUser(
       { role: "readWrite", db: "[yourDBName]" }
     ]
 })
+```
 
-`
 8. restart application and navigate to your defined port.
