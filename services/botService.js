@@ -31,7 +31,7 @@ let t = 0;
 
 bot.start((ctx) => {
     chatId = ctx.chat.id;
-    ctx.reply(`Hallo ${ctx.message.from.first_name} kann ich dir helfen?`);
+    ctx.reply(`Hallo ${ctx.message.from.first_name} Ich helfe Dir hier mit dem Grünzeugs. Alle paar Stunden erhalte ich neue Messdaten. Das Spektrum der Werte geht von 1-99. Unterschreitet eine Messung die 60, solltest Du vielleicht mal bewässern. Liegen die Werte länger über 90, droht Staunässe. Du kannst mich jederzeit hier nach den Pflanzen fragen, ich liefere Dir dann alle zuletzt erfassten Messdaten. Sobald ich einen Wert im kritischen Bereich erhalte, melde ich mich umgehend.`);
 });
 
 bot.help((ctx) => ctx.reply('Frag mich nach den Pflanzen, ich weiss Bescheid.'));
@@ -53,6 +53,7 @@ bot.on('message', (ctx) => {
                     if (plants.length < 1) {
                         return ctx.reply(`ich finde keine Pfalnzen in der Datenbank, \nhast du schon welche erfasst?`);
                     }
+                    ctx.reply(`Hier die Werte aller Pflanzen die ich erfasst habe.\n`);
                     plants.forEach(plant => {
                         dbService.getPlantReadings(plant.plantId)
                             .then(readings => {

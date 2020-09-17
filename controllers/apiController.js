@@ -1,7 +1,10 @@
 const dbService = require('../services/dbService'),
     botService = require('../services/botService'),
     weatherService = require('../services/weatherService'),
-    { infoLog, warnLog } = require('../services/loggerService');
+    {
+        infoLog,
+        warnLog
+    } = require('../services/loggerService');
 
 const getPlants = (req, res) => {
     //call dbService
@@ -37,11 +40,16 @@ const getPlantReadings = (req, res) => {
 const storeReadings = (req, res) => {
 
     //console.log(req.body);
-    if (req.body.hum < 60) {//notify user if value is to low
+    if (req.body.hum < 60 || req.body.hum > 90) { //notify user if value is to low or high
 
         dbService.getPlantName(req.body.plantId).then(name => {
 
-            botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh giessen.`);
+            if (req.body.hum < 60) {
+                botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh giessen.`);
+            } else {
+                botService.sendMsg(`Obacht... ${name} hat einen kritisch hohen Wert (${req.body.hum}) bei der letzten Messung.\n wenn das innerhalb der nächsten Tage nicht zurück geht, droht Staunässe!.`);
+            }
+
 
         }).catch(err => {
             warnLog(`API-ERROR at getPlantname for Bot-Message ${err}`);
@@ -85,7 +93,8 @@ const updatePlants = (req, res) => {
         })
         .catch((err) => {
             res.status(500).se
-            warnLog(`API-ERROR at updatePlant ${err}`); nd(err);
+            warnLog(`API-ERROR at updatePlant ${err}`);
+            nd(err);
         });
 }
 
