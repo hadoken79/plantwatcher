@@ -21,13 +21,12 @@ const int sensorPowerPin = 25;
   int humVal;
   int tries;
   
-  //char api[] = "http://jsonplaceholder.typicode.com/posts";
+
   char api[] = "http://192.168.0.74/api/postReadings";
   
-  //reference values for specific sensor
+  //reference values for specific sensor (capacitive soil moisture sensor, seems to workk best)
   int maxWetValue = 1200; 
   int maxDryValue = 3000;
-
 
 
   

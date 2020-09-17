@@ -23,12 +23,14 @@ the styling ist made with sass bulma.
 *installaion*
 1. pull this repo to local folder
 2. rename sample-env in .env and replace example values with your data
-3. update ipaddress for your server in esp32 code (if needed) and in main.js for websocket connection. if your run this app on a public server (not recomended) you could use your domain instead of ip. If you use my esp32 code, you have to add your own wifiConf.h File to your Arduino-IDE Libaries.
+3. update ipaddress for your server in esp32 code and in main.js for websocket connection. if your run this app on a public server (not recomended) you could use your domain instead of ip. If you use my esp32 code, you have to add your own Wifi Configuration File to your Arduino-IDE Libaries.
 In my case ~/arduino-1.8.13-linux64/arduino-1.8.13/libraries/Configuration
-`//in WiFiConf.h
+
+(in WIFIConf.h)
+```
  const char *SSID = "Your SSID";
  const char *WiFiPassword = "Your Password";
- `
+```
 4. run docker-compose up --build in terminal from application-root folder
 5. bash in mongo container. ('auth' has been enabled during build, in docker-compose)
 `docker exec -it plant_mongo /bin/bash`
@@ -49,3 +51,5 @@ db.createUser(
 ```
 
 8. restart application and navigate to your defined port.
+
+The Dashboard should be self explanatory.
