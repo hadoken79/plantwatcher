@@ -1,7 +1,14 @@
 import Sortable from 'sortablejs';
-import { getDataFromBackend, updatePlant } from './com.js';
-import { drawToast } from './toasts';
-import { createPlantCard } from './main';
+import {
+    getDataFromBackend,
+    updatePlant
+} from './com.js';
+import {
+    drawToast
+} from './toasts';
+import {
+    createPlantCard
+} from './main';
 let sortable;
 
 
@@ -12,17 +19,17 @@ const makeSortable = (collection) => {
     sortable = Sortable.create(collection, {
         animation: 250,
         disabled: true, //disable per default
-        onEnd: (/**Event*/evt) => {
+        onEnd: ( /**Event*/ evt) => {
             updateAllPlantsInDB();
-            let itemEl = evt.item;  // dragged HTMLElement
-            evt.to;    // target list
-            evt.from;  // previous list
-            evt.oldIndex;  // element's old index within old parent
-            evt.newIndex;  // element's new index within new parent
+            let itemEl = evt.item; // dragged HTMLElement
+            evt.to; // target list
+            evt.from; // previous list
+            evt.oldIndex; // element's old index within old parent
+            evt.newIndex; // element's new index within new parent
             evt.oldDraggableIndex; // element's old index within old parent, only counting draggable elements
             evt.newDraggableIndex; // element's new index within new parent, only counting draggable elements
             evt.clone // the clone element
-            evt.pullMode;  // when item is in another sortable: `"clone"` if cloning, `true` if moving
+            evt.pullMode; // when item is in another sortable: `"clone"` if cloning, `true` if moving
         },
     });
 
@@ -55,15 +62,15 @@ const toggleSettingsView = () => {
     elems.forEach(element => {
         //element.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.removeEventListener('click', null);
         //hide CardData
-        element.firstChild.classList.toggle('is-hidden');//deleteButton
-        element.firstChild.nextSibling.classList.toggle('is-hidden');//header
+        element.firstChild.classList.toggle('is-hidden'); //deleteButton
+        element.firstChild.nextSibling.classList.toggle('is-hidden'); //header
 
-        element.firstChild.nextSibling.nextSibling.firstChild.classList.toggle('is-hidden');//GaugeArea
-        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.classList.toggle('is-hidden');//LineArea
-        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden');//UpdateArea
+        element.firstChild.nextSibling.nextSibling.firstChild.classList.toggle('is-hidden'); //GaugeArea
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.classList.toggle('is-hidden'); //LineArea
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.classList.toggle('is-hidden'); //UpdateArea
 
         //show inputs
-        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//form
+        element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden'); //form
         //element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//title
         //element.firstChild.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.classList.toggle('is-hidden');//id
     })
@@ -83,7 +90,12 @@ const updateAllPlantsInDB = async () => {
 
         //counter in loop is also current position parameter
         //update Database
-        let data = { plantId: plantId, name: title, pos: i, active: true };
+        let data = {
+            plantId: plantId,
+            name: title,
+            pos: i,
+            active: true
+        };
         try {
             let response = await updatePlant('/api/updatePlants', data);
             if (response == 'OK') {
@@ -104,7 +116,11 @@ const updateAllPlantsInDB = async () => {
 const generatePlacehoderCard = async () => {
     //[title, powerstat, gaugeArea, lineArea, lastUpdate, titleInput, idInput, card, saveButton, deleteButton, dataForm, header]
     let newId = await getDataFromBackend('/api/getNewId');
-    let elems = await createPlantCard({ plantId: 9999, name: "new Plant", pos: 9999 });
+    let elems = await createPlantCard({
+        plantId: 9999,
+        name: "new Plant",
+        pos: 9999
+    });
     return new Promise((resolve, reject) => {
         elems[2].classList.toggle('is-hidden');
         elems[3].classList.toggle('is-hidden');
@@ -136,11 +152,13 @@ const toggleDummyCard = () => {
 
 const handleDelete = async (plantId) => {
 
-    let data = { plantId: plantId };//not really deleting, just setting inactiv in db
+    let data = {
+        plantId: plantId
+    }; //not really deleting, just setting inactiv in db
     let confirmButton = document.getElementById('deleteModal-confirm');
 
     confirmButton.addEventListener('click', async () => {
-        await updatePlant('/api/deletePlant', data);//set choosen plant to inactive in db
+        await updatePlant('/api/deletePlant', data); //set choosen plant to inactive in db
         console.log('ID: ' + plantId);
         document.getElementById(plantId).parentElement.parentElement.removeChild(document.getElementById(plantId).parentElement);
         toggleModal();
@@ -160,10 +178,20 @@ const toggleModal = () => {
     modal.classList.toggle('is-active');
 }
 
+const toggleWeatherBar = () => {
+    let container = document.querySelector('.weatherBox');
+    container.classList.toggle('is-hidden');
+}
 
-export { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete }
 
-
-
-
-
+export {
+    makeSortable,
+    updateAllPlantsInDB,
+    toggleSortable,
+    toggleCardWiggle,
+    toggleSettingsView,
+    generatePlacehoderCard,
+    toggleDummyCard,
+    handleDelete,
+    toggleWeatherBar
+}

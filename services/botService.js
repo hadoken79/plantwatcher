@@ -79,7 +79,7 @@ bot.on('message', (ctx) => {
             if (t == 3) return ctx.reply(`bist du dumm?`);
             if (t > 3) return ctx.reply(`geh weg!`);
 
-            return ctx.reply(`du nuschelst so... \nWenn Du was zu deinen Pflanzen wissen willst, dann frag doch einfach.\n aber sprich deutlich.`);
+            return ctx.reply(`du nuschelst so... \nWenn Du was zu deinen Pflanzen wissen willst, dann frag doch einfach. Aber sprich deutlich.`);
         }
     }
 });

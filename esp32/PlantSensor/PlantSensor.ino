@@ -13,7 +13,7 @@
 //RTC_DATA_ATTR int bootCount = 0; //even if just declared, power will stay switched on, even when defined of in sleep configuration
 
 //init vars
-const int plant_1_pin = 36; // = Needs to be a ADC1 pin. ADC2 ports are blocked when wifi is used!. multiple plants could be messured with one mc. varnumber represents plantId
+const int plant_2_pin = 36; // = Needs to be a ADC1 pin. ADC2 ports are blocked when wifi is used!. multiple plants could be messured with one mc. varnumber represents plantId
 const int bat_pin = 34;
 const int sensorPowerPin = 25;
 
@@ -61,7 +61,7 @@ void loop() {
    if(ConnectToWiFi()){
     //setSystemTime(); <--currently not needed, server will add time when storing messures
     
-    sendData(api,1, messureHumidity(plant_1_pin));// <--- repeat for every plant with corresponding pin and PlantId (matches number in pinvariable)
+    sendData(api,2, messureHumidity(plant_2_pin));// <--- repeat for every plant with corresponding pin and PlantId (matches number in pinvariable)
     //eg sendData(api, ,2, messureHumidity(plant_2_pin));
     
     WiFi.disconnect();
@@ -149,7 +149,8 @@ bool sendData(char api[],int plantId, int val){
         //Serial.print("[HTTP] POST...\n");
         
         // start connection and send HTTP message
-        int httpResponseCode = http.POST("{\"plantId\": " + String(plantId) + ", \"hum\": " + String(val) + ", \"power\": " + String(batterieLevel) + "}"); //Send the actual POST request as json
+        //int httpResponseCode = http.POST("{\"plantId\": " + String(plantId) + ", \"hum\": " + 44 + ", \"power\": " + String(batterieLevel) + "}"); //Send the actual POST request as json
+        int httpResponseCode = http.POST("{\"plantId\": 3, \"hum\": 59, \"power\": 39}"); //Send the actual POST request as json
 
 
         // httpCode will be negative on error

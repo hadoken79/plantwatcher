@@ -28,15 +28,42 @@ const buildWeatherBlock = (day) => {
 
         //map openweatherapi icons to fontawesome icons
         let faIcons = {
-            '01d': { 'code': 'fas fa-sun', 'color': 'has-text-warning' },
-            '02d': { 'code': 'fas fa-cloud-sun', 'color': 'has-text-warning' },
-            '03d': { 'code': 'fas fa-cloud', 'color': 'has-text-grey-light' },
-            '04d': { 'code': 'fas fa-cloud-meatball', 'color': 'has-text-grey-light' },
-            '09d': { 'code': 'fas fa-cloud-rain', 'color': 'has-text-link' },
-            '10d': { 'code': 'fas fa-cloud-showers-heavy', 'color': 'has-text-link' },
-            '11d': { 'code': 'fas fa-bolt', 'color': 'has-text-danger' },
-            '13d': { 'code': 'fas fa-snowflake', 'color': 'has-text-white-bis' },
-            '50d': { 'code': 'fas fa-smog', 'color': 'has-text-grey-lighter' }
+            '01d': {
+                'code': 'fas fa-sun',
+                'color': 'has-text-warning'
+            },
+            '02d': {
+                'code': 'fas fa-cloud-sun',
+                'color': 'has-text-warning'
+            },
+            '03d': {
+                'code': 'fas fa-cloud',
+                'color': 'has-text-grey-light'
+            },
+            '04d': {
+                'code': 'fas fa-cloud-meatball',
+                'color': 'has-text-grey-light'
+            },
+            '09d': {
+                'code': 'fas fa-cloud-rain',
+                'color': 'has-text-link'
+            },
+            '10d': {
+                'code': 'fas fa-cloud-showers-heavy',
+                'color': 'has-text-link'
+            },
+            '11d': {
+                'code': 'fas fa-bolt',
+                'color': 'has-text-danger'
+            },
+            '13d': {
+                'code': 'fas fa-snowflake',
+                'color': 'has-text-white-bis'
+            },
+            '50d': {
+                'code': 'fas fa-smog',
+                'color': 'has-text-grey-lighter'
+            }
         }
 
         //create weatherBlock

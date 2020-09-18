@@ -1,6 +1,6 @@
 import * as GaugeChart from 'gauge-chart';
 import styles from './style.scss';
-import { createWebSocketStream } from 'ws';
+
 
 const drawLineChart = (readings, parent) => {
     readings = readings.reverse();
@@ -54,7 +54,7 @@ const drawLineChart = (readings, parent) => {
 };
 
 const drawGauge = (readings, parent) => {
-    //let element = document.querySelector(`#gaugeArea`); //${elem.plantId}
+
     if (!parent) {
         console.log('Error! no GaucheArea found in html');
         return;
@@ -86,4 +86,7 @@ const drawGauge = (readings, parent) => {
     GaugeChart.gaugeChart(parent, 270, gaugeOptions).updateNeedle(latestVal);
 };
 
-export { drawLineChart, drawGauge };
+export {
+    drawLineChart,
+    drawGauge
+};

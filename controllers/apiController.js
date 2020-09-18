@@ -47,7 +47,7 @@ const storeReadings = (req, res) => {
             if (req.body.hum < 60) {
                 botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh giessen.`);
             } else {
-                botService.sendMsg(`Obacht... ${name} hat einen kritisch hohen Wert (${req.body.hum}) bei der letzten Messung.\n wenn das innerhalb der nächsten Tage nicht zurück geht, droht Staunässe!.`);
+                botService.sendMsg(`Obacht... ${name} hat einen kritisch hohen Wert (${req.body.hum}) bei der letzten Messung.\n Wenn das innerhalb der nächsten Tage nicht zurück geht, droht Staunässe!.`);
             }
 
 

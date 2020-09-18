@@ -1,9 +1,28 @@
 require('./style.scss'); //adding styling for webpack
-import { drawLineChart, drawGauge } from './charts.js';
-import { getDataFromBackend, updatePlant } from './com.js';
-import { makeSortable, updateAllPlantsInDB, toggleSortable, toggleCardWiggle, toggleSettingsView, generatePlacehoderCard, toggleDummyCard, handleDelete } from './DashboardSettings';
-import { drawToast } from './toasts';
-import { renderWeatherWidget } from './weather';
+import {
+    drawLineChart,
+    drawGauge
+} from './charts.js';
+import {
+    getDataFromBackend,
+    updatePlant
+} from './com.js';
+import {
+    makeSortable,
+    updateAllPlantsInDB,
+    toggleSortable,
+    toggleCardWiggle,
+    toggleSettingsView,
+    toggleWeatherBar,
+    toggleDummyCard,
+    handleDelete
+} from './DashboardSettings';
+import {
+    drawToast
+} from './toasts';
+import {
+    renderWeatherWidget
+} from './weather';
 
 
 
@@ -11,7 +30,7 @@ import { renderWeatherWidget } from './weather';
 document.addEventListener('DOMContentLoaded', (event) => {
     //connection with websocketserver.js Port 8080 (nativ html5)
     //-------Sockets-----------------------------------------------------
-    let ws = new WebSocket('ws://127.0.0.1:8080');//works only for local development!!!!!!!!!!!!! otherwise use domain or server IP
+    let ws = new WebSocket('ws://127.0.0.1:8080'); //works only for local development!!!!!!!!!!!!! otherwise use domain or server IP
     ws.onopen = () => {
         console.log('websocket to host connected ...');
         ws.send('client listening');
@@ -48,13 +67,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
         toggleSortable();
         toggleCardWiggle();
         toggleSettingsView();
+        toggleWeatherBar();
     });
 
     document.getElementById('deleteModal-close').addEventListener('click', (e) => {
         document.getElementById('deleteModal').classList.remove('is-active');
     })
 
-    getDataFromBackend('/api/getWeather').then(data => { renderWeatherWidget(data) });
+    getDataFromBackend('/api/getWeather').then(data => {
+        renderWeatherWidget(data)
+    });
 });
 
 
@@ -69,7 +91,7 @@ const drawDashboard = async () => {
         drawToast('error', 'noch keine Pflanzen vorhanden.\n erfasse Dein erstes Gewächs über den Settings Button...', 5000);
     }
 
-    for (const plant of plants) {//for loop to keep order of position parameter
+    for (const plant of plants) { //for loop to keep order of position parameter
         //get readings for this plant
         let readings = await getDataFromBackend(`/api/getPlantReadings?pId=${plant.plantId}`)
 
@@ -177,8 +199,12 @@ const fillCardWithData = (plant, readings, elements) => {
 
         lastUpdate.innerHTML = `letztes Update:<br> nicht verfügbar`;
         //dummydata to still draw element at same size
-        drawGauge([{ "hum": 1 }], gaugeArea); //charts.js
-        drawLineChart([{ "hum": 1 }], lineArea);
+        drawGauge([{
+            "hum": 1
+        }], gaugeArea); //charts.js
+        drawLineChart([{
+            "hum": 1
+        }], lineArea);
     }
 }
 
@@ -207,7 +233,7 @@ const createPlantCard = (plant) => {
         deleteButton.addEventListener('click', (e) => {
             let plantId = e.target.parentElement.id;
             let confirmButton = document.getElementById('deleteModal-confirm');
-            confirmButton.replaceWith(confirmButton.cloneNode(true));//remove old eventlisteners
+            confirmButton.replaceWith(confirmButton.cloneNode(true)); //remove old eventlisteners
             handleDelete(plantId);
         })
 
@@ -253,18 +279,23 @@ const createPlantCard = (plant) => {
 
                 let newId = await getDataFromBackend('/api/getNewId');
                 //remove dummytags
-                e.target.className = 'button is-small is-primary is-pulled-right is-rounded settingsSaver';//change button style
-                e.target.innerText = 'save';//change savebutton text
+                e.target.className = 'button is-small is-primary is-pulled-right is-rounded settingsSaver'; //change button style
+                e.target.innerText = 'save'; //change savebutton text
 
-                e.target.parentElement.parentElement.parentElement.firstChild.classList.toggle('is-hidden');//make deletebutton visible
+                e.target.parentElement.parentElement.parentElement.firstChild.classList.toggle('is-hidden'); //make deletebutton visible
                 e.target.parentElement.parentElement.parentElement.classList.remove('dummycard');
-                e.target.parentElement.parentElement.parentElement.id = newId.plantId;//store the news id from db in card id field
+                e.target.parentElement.parentElement.parentElement.id = newId.plantId; //store the news id from db in card id field
 
                 //store new Plant
                 let name = e.target.previousSibling.previousSibling.value;
                 let cards = document.querySelectorAll('.card');
-                let position = cards.length - 1;//subtract dummy
-                plant = { plantId: newId.plantId, name: name, pos: position, active: true };
+                let position = cards.length - 1; //subtract dummy
+                plant = {
+                    plantId: newId.plantId,
+                    name: name,
+                    pos: position,
+                    active: true
+                };
                 await updatePlant('/api/postPlant', plant);
                 await toggleDummyCard();
 
@@ -287,7 +318,7 @@ const createPlantCard = (plant) => {
                     return;
                 }
             }
-            updateAllPlantsInDB();//position Element for every card has to get an update, in case order has changed
+            updateAllPlantsInDB(); //position Element for every card has to get an update, in case order has changed
             //exit settings mode
             //toggleSortable();
             //toggleCardWiggle();
@@ -323,4 +354,6 @@ const createPlantCard = (plant) => {
 
 }
 
-export { createPlantCard }
+export {
+    createPlantCard
+}
