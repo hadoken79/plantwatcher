@@ -2,7 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {
+    CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = env => {
@@ -15,8 +17,7 @@ module.exports = env => {
             filename: '[name].[contenthash].js'
         },
         module: {
-            rules: [
-                {
+            rules: [{
                     test: /\.s[ac]ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -26,16 +27,14 @@ module.exports = env => {
                 },
                 {
                     test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                    use: [
-                        {
-                            loader: 'file-loader',
-                            options: {
-                                name: '[name].[ext]',
-                                outputPath: 'assets/',
-                                publicPath: '/', //is handled by express-static
-                            },
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'assets/',
+                            publicPath: '/', //is handled by express-static
                         },
-                    ],
+                    }, ],
                 },
             ]
         },
@@ -46,7 +45,9 @@ module.exports = env => {
                 filename: 'index.html',
                 template: path.resolve(__dirname, 'views/dashboard.html')
             }),
-            new MiniCssExtractPlugin(),
+            new MiniCssExtractPlugin({
+                filename: '[name].[contenthash].css',
+            }),
             new CleanWebpackPlugin(),
             new FaviconsWebpackPlugin(path.resolve(__dirname, 'favicon.png'))
         ],
