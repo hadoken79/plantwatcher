@@ -45,9 +45,9 @@ const storeReadings = (req, res) => {
         dbService.getPlantName(req.body.plantId).then(name => {
 
             if (req.body.hum < 60) {
-                botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung.\n Geh giessen.`);
+                botService.sendMsg(`Obacht... ${name} hat einen kritisch tiefen Wert (${req.body.hum}) bei der letzten Messung. Geh giessen.`);
             } else {
-                botService.sendMsg(`Obacht... ${name} hat einen kritisch hohen Wert (${req.body.hum}) bei der letzten Messung.\n Wenn das innerhalb der nächsten Tage nicht zurück geht, droht Staunässe!.`);
+                botService.sendMsg(`Obacht... ${name} hat einen kritisch hohen Wert (${req.body.hum}) bei der letzten Messung. Wenn das innerhalb der nächsten Tage nicht zurück geht, droht Staunässe!.`);
             }
 
 
