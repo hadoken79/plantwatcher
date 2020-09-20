@@ -1,4 +1,4 @@
-require('./style.scss'); //adding styling for webpack
+require('./style.scss'); //adding styling for webpack to extract
 import {
     drawLineChart,
     drawGauge
@@ -28,7 +28,7 @@ import {
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    //connection with websocketserver.js Port 8080 (nativ html5)
+    //connection with websocketserver.js Port 8080
     //-------Sockets-----------------------------------------------------
     let ws = new WebSocket('ws://127.0.0.1:8080'); //works only for local development!!!!!!!!!!!!! otherwise use domain or server IP
     ws.onopen = () => {
@@ -284,6 +284,7 @@ const createPlantCard = (plant) => {
 
                 e.target.parentElement.parentElement.parentElement.firstChild.classList.toggle('is-hidden'); //make deletebutton visible
                 e.target.parentElement.parentElement.parentElement.classList.remove('dummycard');
+                e.target.parentElement.parentElement.parentElement.classList.add('wiggle');
                 e.target.parentElement.parentElement.parentElement.id = newId.plantId; //store the news id from db in card id field
 
                 //store new Plant

@@ -51,6 +51,7 @@ const toggleSortable = () => {
 const toggleCardWiggle = () => {
     let elems = document.querySelectorAll('.card:not(.dummycard)');
     elems.forEach(element => {
+
         element.classList.toggle('wiggle');
     });
 
@@ -125,7 +126,7 @@ const generatePlacehoderCard = async () => {
         elems[2].classList.toggle('is-hidden');
         elems[3].classList.toggle('is-hidden');
         elems[4].classList.toggle('is-hidden');
-        elems[7].className = 'card dummycard wiggle';
+        elems[7].className = 'card dummycard'; //removed wiggle
         elems[5].classList.add('dummytitle');
         elems[5].setAttribute('placeholder', 'Neue Pflanze');
         elems[8].className = 'button is-small is-success is-pulled-right is-rounded newPlant'
