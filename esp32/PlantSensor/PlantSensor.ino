@@ -108,7 +108,7 @@ bool ConnectToWiFi()
 int messureHumidity(int potPin){
 
     //power up messure pin
-    digitalWrite(LED_BUILTIN, HIGH);//for some fucked up reason, sensor reads lower values when led not pulled high bevor reading.....
+    digitalWrite(LED_BUILTIN, HIGH);//for some f***d up reason, sensor reads lower values when led not pulled high bevor reading.....
     digitalWrite(sensorPowerPin, HIGH);
     delay(300);
     potValue = analogRead(potPin);
@@ -216,7 +216,7 @@ void resetVals(){
 int powerCheck(){
   Serial.print("batraw");
   Serial.println(analogRead(bat_pin));
-  int bat = (map(analogRead(bat_pin), 2000, 4095, 0, 100));//needs to be calibrated for every powersource and corresponding voltage
+  int bat = (map(analogRead(bat_pin), 2000, 4095, 0, 100));//needs to be calibrated for every powersource and corresponding voltage. falling under 2.7v is considered empty
 
     Serial.print("batteryLevel ");
     Serial.println(bat);
