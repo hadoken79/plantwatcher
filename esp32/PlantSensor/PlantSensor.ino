@@ -22,7 +22,7 @@ const int sensorPowerPin = 25;
   int tries;
   
 
-  char api[] = "http://192.168.0.74/api/postReadings";
+  char api[] = "http://192.168.0.100/api/postReadings";
   
   //reference values for specific sensor (capacitive soil moisture sensor, seems to workk best)
   int maxWetValue = 1200; 

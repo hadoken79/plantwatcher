@@ -30,7 +30,7 @@ import {
 document.addEventListener('DOMContentLoaded', (event) => {
     //connection with websocketserver.js Port 8080
     //-------Sockets-----------------------------------------------------
-    let ws = new WebSocket('ws://127.0.0.1:8080'); //works only for local development!!!!!!!!!!!!! otherwise use domain or server IP
+    let ws = new WebSocket('ws://192.168.0.100:8080'); //put your servers ip or localhost here!!!!!!!!!!!!! otherwise use domain
     ws.onopen = () => {
         console.log('websocket to host connected ...');
         ws.send('client listening');
