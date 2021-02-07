@@ -44,7 +44,7 @@ void loop() {
   //humVal = map(potValue, dryValue, wetValue, 1, 99);
   humVal = map(potValue, 3100, 1100, 1, 99);
   //Serial.println(potValue);
-  //Serial.println(humVal);
+  Serial.println(humVal);
 
     //digitalWrite(LED_BUILTIN, LOW);
   digitalWrite(sensorPowerPin, LOW);
