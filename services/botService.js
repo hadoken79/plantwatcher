@@ -41,7 +41,8 @@ bot.catch((err, ctx) => {
     ctx.reply('Fehler in der Verarbeitung der Eingabe. Log-Eintrag wurde erstellt.');
 });
 
-bot.on('message', (ctx) => {
+
+bot.hears('Pflanzen', (ctx) => {
 
     if (ctx.message.text) {
         if (ctx.message.text.match(regex)) {
